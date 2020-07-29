@@ -9,6 +9,29 @@
             background-color: rgb(241,241, 241);
             background-clip: border-box;
         }
+        #search_button {
+            height: 30px;
+            min-width: 120px;
+            background-color: #4d90fe;
+            border: 1px solid #3079ed;
+            color: #fff;
+            border-radius: 2px;
+            cursor: default;
+            font-size: 11px;
+            font-weight: bold;
+            text-align: center;
+            white-space: nowrap;
+            margin-right: 0;
+        }
+            #search_button:hover {
+                background-color: #357ae8;
+                border: 1px solid #2f5bb7;
+            }
+        @media (max-width: 1000px) {
+            .help_column {
+                display: none;
+            }
+        }
     </style>
 </head>
 <body>
@@ -45,7 +68,7 @@
                         all these words:
                     </div>
                     <div class="input_column">
-                        <input class="textbox" type="text" />
+                        <input class="textbox" type="text" name="as_q" />
                     </div>
                     <div class="help_column">
                         Type the important words: tri-colour rat terrier
@@ -56,7 +79,7 @@
                         this exact word or phrase:
                     </div>
                     <div class="input_column">
-                        <input class="textbox" type="text" />
+                        <input class="textbox" type="text" name="as_epq" />
                     </div>
                     <div class="help_column">
                         Put exact words in quotes: "rat terrier"
@@ -67,7 +90,7 @@
                         any of these words:
                     </div>
                     <div class="input_column">
-                        <input class="textbox" type="text" />
+                        <input class="textbox" type="text" name="as_oq" />
                     </div>
                     <div class="help_column">
                         Type OR between all the words you want: miniature OR standard
@@ -78,11 +101,18 @@
                         none of these words:
                     </div>
                     <div class="input_column">
-                        <input class="textbox" type="text" />
+                        <input class="textbox" type="text" name="as_eq" />
                     </div>
                     <div class="help_column">
                         Put a minus sign just before words that you don't want: -rodent, -"Jack Russell
                     </div>
+                </div>
+                <div class="search_row">
+                    <div class="name_column"></div>
+                    <div class="input_column">
+                        <input id="search_button" class="button" type="submit" value="Advanced Search">
+                    </div>
+                    <div class="help_column"></div>
                 </div>
             </form>
         </div>
