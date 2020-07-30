@@ -11,27 +11,37 @@
     <body>
         <div class="row">
             <div class="sidebar col-lg-2 col-md-3">
-                <h2>Wiki</h2>
-                <form>
-                    <input class="search" type="text" name="q" placeholder="Search Encyclopedia">
-                </form>
-                <div>
-                    <a href="{% url 'encyclopedia:index' %}">Home</a>
-                </div>
-                <div>
-                    Create New Page
-                </div>
-                <div>
-                    Random Page
-                </div>
-                {% block nav %}
-                {% endblock %}
+                <ul div class="nav">
+                    <li class="nav_item">
+                        <div class="text-left navbar-brand ml-3 h1" style="width: 100%;">Wiki</div>
+                    </li>
+                    <li>
+                        <form>
+                            <input class="search form-control mr-sm-2" type="text" name="q"
+                                placeholder="Search Encyclopedia">
+                        </form>
+                    </li>
+                    <li class="nav_item">
+                        <a class="nav-link" href="{% url 'encyclopedia:index' %}">Home</a>
+                    </li>
+                    <li class="nav_item">
+                        <div class="nav-link">
+                            Create New Page
+                        </div>
+                    </li>
+                    <li class="nav_item">
+                        <div class="nav-link">
+                            Random Page
+                        </div>
+                    </li>
+                </ul>
             </div>
+            {% block nav %}
+            {% endblock %}
             <div class="main col-lg-10 col-md-9">
                 {% block body %}
                 {% endblock %}
-            </div>
+            </div>    
         </div>
-
     </body>
 </html>
