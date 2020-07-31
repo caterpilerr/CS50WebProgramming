@@ -16,8 +16,8 @@
                         <div class="text-left navbar-brand ml-3 h1" style="width: 100%;">Wiki</div>
                     </li>
                     <li>
-                        <form>
-                            <input class="search form-control mr-sm-2" type="text" name="q"
+                        <form action="{% url 'encyclopedia:search'%}">
+                            <input class="search form-control mr-sm-2" type="text" name="search"
                                 placeholder="Search Encyclopedia">
                         </form>
                     </li>
@@ -30,9 +30,7 @@
                         </div>
                     </li>
                     <li class="nav_item">
-                        <div class="nav-link">
-                            Random Page
-                        </div>
+                            <a class="nav-link" href="{% url 'encyclopedia:random' %}">Random page</a>
                     </li>
                 </ul>
             </div>
