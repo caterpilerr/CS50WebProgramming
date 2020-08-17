@@ -54,7 +54,10 @@ def new_entry(request):
             entries = util.list_entries()
             if not title in entries:
                 util.save_entry(title, content)
+                messages.success(request, "New entry has been successfully saved!")
             else:
-                messages.error(request, 'Page with same title already exists!')
+                messages.error(request, "Page with same title already exists!")
+        elif content:
+            messages.warning(request, "You are trying to save entry with no title!")
     return render(request, "encyclopedia/new_entry.html")
 
