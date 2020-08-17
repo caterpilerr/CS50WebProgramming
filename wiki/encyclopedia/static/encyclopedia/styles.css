@@ -45,3 +45,8 @@ textarea {
     margin: 0;
     flex-wrap: nowrap;
 }
+
+.textarea-content {
+    min-height: 40px;
+    background-color: white;
+}

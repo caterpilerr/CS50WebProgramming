@@ -4,6 +4,7 @@
 
 <html lang="en">
     <head>
+        <meta charset="UTF-8"/>
         <title>{% block title %}{% endblock %}</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <link href="{% static 'encyclopedia/styles.css' %}" rel="stylesheet">
@@ -16,7 +17,7 @@
                         <div class="text-left navbar-brand ml-3 h1" style="width: 100%;">Wiki</div>
                     </li>
                     <li>
-                        <form action="{% url 'encyclopedia:search'%}">
+                        <form action="{% url 'encyclopedia:search'%}" autocomplete="off">
                             <input class="search form-control mr-sm-2" type="text" name="search"
                                 placeholder="Search Encyclopedia">
                         </form>
@@ -25,12 +26,10 @@
                         <a class="nav-link" href="{% url 'encyclopedia:index' %}">Home</a>
                     </li>
                     <li class="nav_item">
-                        <div class="nav-link">
-                            Create New Page
-                        </div>
+                        <a class="nav-link" href="{% url 'encyclopedia:new_entry' %}">Create New Page</a>
                     </li>
                     <li class="nav_item">
-                            <a class="nav-link" href="{% url 'encyclopedia:random' %}">Random page</a>
+                        <a class="nav-link" href="{% url 'encyclopedia:random' %}">Random page</a>
                     </li>
                 </ul>
             </div>
