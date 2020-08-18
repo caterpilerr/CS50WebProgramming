@@ -33,13 +33,12 @@ def entry(request, title):
     content = util.get_entry(title)
     if not content:
         content = f"#{title}\n Wiki doesn't have article with this exact name."
-    else:    
-        md_converter = Markdown()
-        content = md_converter.convert(content)
+    md_converter = Markdown()
+    content = md_converter.convert(content)
     return render(request, "encyclopedia/entry.html", {
         "title": title,
         "content": content
-    })
+        })
 
 def random(request):
     title = Random().choice(util.list_entries())
@@ -47,17 +46,42 @@ def random(request):
 
 
 def new_entry(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         title = request.POST["title"]
-        content = request.POST["page_content"].encode()
+        content = request.POST["content"]
         if title:
             entries = util.list_entries()
-            if not title in entries:
-                util.save_entry(title, content)
+            if not title.lower() in (entry.lower() for entry in entries):
+                util.save_entry(title, content.encode("utf-8"))
                 messages.success(request, "New entry has been successfully saved!")
+                return HttpResponseRedirect(reverse("encyclopedia:entry", kwargs={'title': title}))
             else:
                 messages.error(request, "Page with same title already exists!")
         elif content:
             messages.warning(request, "You are trying to save entry with no title!")
     return render(request, "encyclopedia/new_entry.html")
+
+
+def edit_entry(request):
+    if request.method == "GET":
+        title = request.GET["title"]
+        content = util.get_entry(title)
+        return render(request, "encyclopedia/edit_entry.html", {
+            "title" : title,
+            "content" : content
+            })
+    else:
+        title = request.POST["title"]
+        content = request.POST["content"]
+        if content == util.get_entry(title):
+            messages.warning(request, "No differences have been made!")
+            return render(request, "encyclopedia/edit_entry.html", {
+                "title" : title,
+                "content" : content
+            })
+        else:
+            util.save_entry(title, content.encode("utf-8"))
+            messages.success(request, "Entry have been successfully modified!")
+            return HttpResponseRedirect(reverse("encyclopedia:entry", kwargs={'title': title}))
+        
 
