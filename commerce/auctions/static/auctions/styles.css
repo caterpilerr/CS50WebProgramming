@@ -2,6 +2,26 @@
     box-sizing: border-box;
 }
 
+img {
+    width: inherit;
+}
+
+.row {
+    width: inherit;
+}
+
+.href_img {
+    display: block;
+    width: inherit;
+}
+
 .navbar {
     --heightNav: .navbar.width;
+}
+
+.truncated_description {
+    width: inherit;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

@@ -1,0 +1,95 @@
+{% extends "auctions/layout.html" %}
+
+{% block title %}
+{{ listing.title }} |
+{% endblock%}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row px-3 pt-3">
+        <div class="col-sm-8 col-md-8 col-xl-4">
+            <div class="col mb-2 border rounded border-gray px-3 py-3">
+                <img src="{{ listing.image.url }}">
+            </div>
+        </div>
+        <div class="col-md-4 col-xl-3">
+            <div>
+                <h3>{{ listing.title }}</h3>
+            </div>
+            <hr>
+            <div class="mb-2">
+                <span class="font-weight-light">Time left: </span>{{ listing.end_date|timeuntil }}
+            </div>
+            <div class="mb-2">
+                <span class="font-weight-light">Current price: </span><b>{{ listing.price }}$</b>
+            </div>
+            <hr>
+            <div class="mb-2">
+                <div class="mb-2">
+                    <div class="font-weight-light mb-2">
+                        Bids: <b><a href=">">{{ bids_number }}</a></b>
+                    </div>
+                    {% if user.is_authenticated %}
+                    {}
+                    <form action="{% url 'listing' listing.id %}" method="POST">
+                        {% csrf_token %}
+                        {{ form.value.errors }}
+                        <div class="input-group">
+                            {{ form.value }}
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="submit">Place Bid</button>
+                            </div>
+                        </div>
+                        <div class="font-weight-light">Enter <b>{{ min_bid }}$</b> or more</div>
+                    </form>
+                    {% else %}
+                        <form action="{% url 'login' %}" method="GET">
+                            {{ form.value.errors }}
+                            <div class="input-group">
+                                {{ form.value }}
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary" type="submit">Place Bid</button>
+                                </div>
+                            </div>
+                            <div class="font-weight-light">Enter <b>{{ min_bid }}$</b> or more</div>
+                        </form>  
+                    {% endif %}
+                </div>
+                <div class="mb-2">
+                    {% if user.is_authenticated %}
+                        {% if is_watched %}
+                        <form action="{% url 'remove_from_watchlist' %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="listing_id" value="{{ listing.id }}">
+                            <button class="btn btn-outline-secondary btn-sm" type="submit">Remove from Watchlist</button>
+                        </form>
+                        {% else %}
+                        <form action="{% url 'add_to_watchlist' %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="listing_id" value="{{ listing.id }}">
+                            <button class="btn btn-outline-primary btn-sm" type="submit">Add to watchlist</button>
+                        </form>
+                        {% endif %}
+                    {% else %}
+                        <form action="{% url 'login' %}" method="GET">
+                            <button class="btn btn-outline-primary btn-sm" type="submit">Add to watchlist</button>
+                        </form>
+                    {% endif %}
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row px-3 pt-3">
+        <div class="col-xl-7">
+            <div class="mb-2">
+                <span class="font-weight-light">Description: </span>
+                <div class="px-3 pt-2">
+                    <span class="font-italic">"{{ listing.description}}"</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock%}
