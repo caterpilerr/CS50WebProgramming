@@ -40,7 +40,7 @@ class ListingForm(forms.Form):
     photo = forms.FileField(
         label="Photo",
         required=False,
-        widget=forms.FileInput(
+        widget=forms.ClearableFileInput(
             attrs={
                 "class": "custom-file-input",
                 "aria-describedby": "item-photo-input"
@@ -87,4 +87,29 @@ class BidForm(forms.Form):
         widget=forms.NumberInput(attrs={
             "class": "form-control"
         })
+    )
+
+
+class CommentForm(forms.Form):
+    title = forms.CharField(
+        label="Title",
+        max_length=40,
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Title"
+            }
+        )
+    )
+    content = forms.CharField(
+        label="Comment",
+        max_length=140,
+        widget=forms.Textarea(
+            attrs={
+                "class": "form-control",
+                "rows": 3,
+                "placeholder": "Your comment",
+                "style": "resize: none"
+                }
+        )
     )

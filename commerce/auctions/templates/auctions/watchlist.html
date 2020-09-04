@@ -1,0 +1,59 @@
+{% extends "auctions/layout.html" %}
+
+{% block title %}
+Watchlist |
+{% endblock%}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row px-3 pt-3">
+        <div class="col">
+            <ul class="nav">
+                <li class="nav-text">
+                <h3>Watchlist</h3>
+            </ul>
+            <hr>
+        </div>
+    </div>
+    <div class="row px-3 pt-3">
+        <div class="col">
+            {% for listing in listings %}
+            <div class="row my-3">
+                <div class="col-md-3 col-xl-2">
+                    <a href="{% url 'listing' listing.id %}" class="href_img">
+                        {% if listing.image %}
+                        <img src="{{ listing.image.url }}">
+                        {% else %}
+                        <img src="{{ MEDIA_URL }}/no_image.jpg">
+                        {% endif %}
+                    </a>
+                </div>
+                <div class="col-md-9 col-xl-4">
+                    <div>
+                        <h4>
+                            <a href="{% url 'listing' listing.id %}">
+                                {{ listing.title }}
+                            </a>
+                        </h4>
+                    </div>
+                    <div>
+                        <h5>
+                            <b>Price:</b> ${{ listing.price }}
+                        </h5>
+                    </div>
+                    <div class="truncated_description">
+                        {{ listing.description }}
+                    </div>
+                    <div>
+                        <span class="font-weight-light">Ended in {{ listing.end_date|timeuntil }}</span>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            {% empty %}
+            There are no listings yet. You can add new!
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

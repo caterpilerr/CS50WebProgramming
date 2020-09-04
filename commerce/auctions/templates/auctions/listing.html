@@ -7,9 +7,13 @@
 {% block body %}
 <div class="container-fluid">
     <div class="row px-3 pt-3">
-        <div class="col-sm-8 col-md-8 col-xl-4">
+        <div class="col-md-8 col-xl-4">
             <div class="col mb-2 border rounded border-gray px-3 py-3">
+                {% if listing.image %}
                 <img src="{{ listing.image.url }}">
+                {% else %}
+                <img src="{{ MEDIA_URL }}/no_image.jpg">
+                {% endif %}
             </div>
         </div>
         <div class="col-md-4 col-xl-3">
@@ -18,78 +22,160 @@
             </div>
             <hr>
             <div class="mb-2">
+                <span class="font-weight-light">Catergory: </span>
+                <a href="{% url 'listings' listing.category %}">
+                    {{ listing.get_category_display}}
+                </a>
+            </div>
+            <div class="mb-2">
+                <span class="font-weight-light">Listed by: </span>
+                <a href="">
+                    {{ listing.owner }}
+                </a>
+            </div>
+            {% if is_ended %}
+            <div class="mb-2">
+                <span class="font-weight-bold">Auction is ended!</span>
+                <h5 class="mt-2">
+                    {% if is_highest %}
+                    <span class="badge badge-success">You are the winner!</span>
+                    {% elif is_bid %}
+                    <span class="badge badge-secondary">You are not the winner!</span>
+                    {% endif %}
+                </h5>
+            </div>
+            {% else %}
+            <div class="mb-2">
                 <span class="font-weight-light">Time left: </span>{{ listing.end_date|timeuntil }}
             </div>
             <div class="mb-2">
-                <span class="font-weight-light">Current price: </span><b>{{ listing.price }}$</b>
+                <span class="font-weight-light">Current price: </span><b>US ${{ listing.price }}</b>
             </div>
             <hr>
             <div class="mb-2">
                 <div class="mb-2">
-                    <div class="font-weight-light mb-2">
-                        Bids: <b><a href=">">{{ bids_number }}</a></b>
-                    </div>
                     {% if user.is_authenticated %}
-                    {}
+                    <div class="font-weight-light mb-2">
+                        Bids: <b>{{ bids_number }}</b>
+                        {% if is_bid %}
+                        {% if is_highest %}
+                        <span class="badge badge-success">Your bid is the highest!</span>
+                        {% else %}
+                        <span class="badge badge-warning">Your bid is not the highest!</span>
+                        {% endif %}
+                        {% else %}
+                        You've not placed a bid!
+                        {% endif %}
+                    </div>
                     <form action="{% url 'listing' listing.id %}" method="POST">
                         {% csrf_token %}
-                        {{ form.value.errors }}
+                        {{ bid_form.value.errors }}
                         <div class="input-group">
-                            {{ form.value }}
+                            {{ bid_form.value }}
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="submit">Place Bid</button>
+                            </div>
+                        </div>
+                        <div class="font-weight-light">Enter <b>US ${{ min_bid }}</b> or more</div>
+                    </form>
+                    {% else %}
+                    <div class="font-weight-light mb-2">
+                        Bids: <b>{{ bids_number }}</b>
+                        Log in to place a bid!
+                    </div>
+                    <form action="{% url 'login' %}" method="GET">
+                        {{ bid_form.value.errors }}
+                        <div class="input-group">
+                            {{ bid_form.value }}
                             <div class="input-group-append">
                                 <button class="btn btn-primary" type="submit">Place Bid</button>
                             </div>
                         </div>
                         <div class="font-weight-light">Enter <b>{{ min_bid }}$</b> or more</div>
                     </form>
-                    {% else %}
-                        <form action="{% url 'login' %}" method="GET">
-                            {{ form.value.errors }}
-                            <div class="input-group">
-                                {{ form.value }}
-                                <div class="input-group-append">
-                                    <button class="btn btn-primary" type="submit">Place Bid</button>
-                                </div>
-                            </div>
-                            <div class="font-weight-light">Enter <b>{{ min_bid }}$</b> or more</div>
-                        </form>  
                     {% endif %}
                 </div>
                 <div class="mb-2">
                     {% if user.is_authenticated %}
-                        {% if is_watched %}
-                        <form action="{% url 'remove_from_watchlist' %}" method="POST">
-                            {% csrf_token %}
-                            <input type="hidden" name="listing_id" value="{{ listing.id }}">
-                            <button class="btn btn-outline-secondary btn-sm" type="submit">Remove from Watchlist</button>
-                        </form>
-                        {% else %}
-                        <form action="{% url 'add_to_watchlist' %}" method="POST">
-                            {% csrf_token %}
-                            <input type="hidden" name="listing_id" value="{{ listing.id }}">
-                            <button class="btn btn-outline-primary btn-sm" type="submit">Add to watchlist</button>
-                        </form>
-                        {% endif %}
+                    {% if is_in_watchlist %}
+                    <form action="{% url 'watchlist' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="listing_id" value="{{ listing.id }}">
+                        <button class="btn btn-outline-secondary btn-sm" type="submit">Remove from Watchlist</button>
+                    </form>
                     {% else %}
-                        <form action="{% url 'login' %}" method="GET">
-                            <button class="btn btn-outline-primary btn-sm" type="submit">Add to watchlist</button>
-                        </form>
+                    <form action="{% url 'watchlist' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="listing_id" value="{{ listing.id }}">
+                        <button class="btn btn-outline-primary btn-sm" type="submit">Add to watchlist</button>
+                    </form>
                     {% endif %}
-                    
+                    {% else %}
+                    <form action="{% url 'login' %}" method="GET">
+                        <button class="btn btn-outline-primary btn-sm" type="submit">Add to watchlist</button>
+                    </form>
+                    {% endif %}
                 </div>
             </div>
+            {% endif %}
         </div>
     </div>
-    <div class="row px-3 pt-3">
-        <div class="col-xl-7">
+    <div class="row px-3">
+        <div class="col-md-8 col-xl-4">
             <div class="mb-2">
                 <span class="font-weight-light">Description: </span>
                 <div class="px-3 pt-2">
                     <span class="font-italic">"{{ listing.description}}"</span>
                 </div>
             </div>
+            {% if comments %}
+            <div class="mb-2">
+                <span class="font-weight-light">Comments:</span>
+            </div>
+            <div class="mb-2">
+                <div class="list-group">
+                    {% for comment in comments %}
+                    <div class="list-group-item">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">{{ comment.title }}</h5>
+                            <small>{{ comment.time|timesince }} ago</small>
+                        </div>
+                        <p class="mb-1">{{ comment.content }}</p>
+                        <small>by {{ comment.author.username}}</small>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% else %}
+            <div class="mb-2">
+                <span class="font-weight-light">There are no comments yet!:</span>
+            </div>
+            {% endif %}
+            <div class="mb-2 border rounded border-gray px-3 py-3">
+                {% if user.is_authenticated %}
+                <form action="{% url 'post_comment' %}" method="POST" autocomplete="off">
+                    {% csrf_token %}
+                    <input type="hidden" name="listing_id" value="{{ listing.id }}">
+                    {{ comment_form.title.errors }}
+                    <span class="font-weight-bold">
+                        <label for="{{ comment_form.title.id_for_label}}">Your comment:</label>
+                    </span>
+                    <div class="input-group mb-2">
+                        {{ comment_form.title }}
+                    </div>
+                    {{ comment_form.content.errors }}
+                    <div class="input-group mb-2">
+                        {{ comment_form.content }}
+                    </div>
+                    <div class="mb-2">
+                        <button type="submit" class="btn btn-primary">Post</button>
+                    </div>
+                </form>
+                {% else %}
+                <span class="font-weight-bold">Only registered users can comment!</span>
+                {% endif %}
+            </div>
         </div>
     </div>
-</div>
 </div>
 {% endblock%}
