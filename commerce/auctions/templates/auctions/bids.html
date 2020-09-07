@@ -3,3 +3,66 @@
 {% block title %}
     Bids | 
 {% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row pl-3 pt-3">
+        <div class="col">
+            <ul class="nav">
+                <li class="nav-text">
+                    <h3>Bids</h3>
+            </ul>
+            <hr>
+        </div>
+    </div>
+    <div class="row pl-3 pt-3">
+        <div class="col">
+            <table class="table">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Item</th>
+                        <th scope="col">Bid</th>
+                        <th scope="col">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for bid in bids %}
+                        <tr>
+                            <th scope="row">{{ forloop.counter }}</th>
+                            <td>
+                                <a href="{% url 'listing' bid.listing.id %}">
+                                    {{ bid.listing.title }}
+                                </a>
+                            </td>
+                            <td>US ${{ bid.value }}</td>
+                            {% if bid.listing.is_ended %}
+                                {% if bid.is_highest %}
+                                <td>
+                                    <span class="badge badge-success">Win</span>
+                                </td>
+                                {% else %}
+                                <td>
+                                    <span class="badge badge-danger">Loss</span>
+                                </td>
+                                {% endif %}
+                            {% else %}
+                                {% if bid.is_highest %}
+                                <td>
+                                    <span class="badge badge-light">Active - Higest</span></td> 
+                                {% else %}
+                                <td>
+                                    <span class="badge badge-warning">Active - Not Highest</span></td>
+                                {% endif %}
+                            {%endif %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+    
+{% endblock %}

@@ -2,17 +2,19 @@
 
 {% block body %}
 <div class="container-fluid">
-            <div class="row px-3 pt-3">
+            <div class="row pl-3 pt-3">
                 <div class="col">
                     <ul class="nav">
                         <li class="nav-text">
-                        <h3>Active Listings
+                        <div>
+                            <h3>Active Listings
+                            </h3>
                             {% if category %}
                             <span class="badge badge-light">{{ category|capfirst  }}</span>
                             {% else%}
                             <span class="badge badge-light">All categories</span>
                             {% endif %}
-                        </h3>
+                        </div>
                         </li>
                         <li class="nav-item dropdown ml-auto">
                                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
@@ -31,7 +33,7 @@
                     <hr>
                 </div>
             </div>
-            <div class="row px-3 pt-3">
+            <div class="row pl-3 pt-3">
                 <div class="col">
                     {% for listing in listings %}
                     <div class="row my-3">

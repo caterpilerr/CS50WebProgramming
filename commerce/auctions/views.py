@@ -5,6 +5,7 @@ from pytz import UTC
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
+from django.db.models import CharField, Value
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -210,6 +211,10 @@ def bids(request):
     if request.user.is_authenticated:
         user = User.objects.get(id=request.user.id)
         bids = user.bids.all()
+        for bid in bids:
+            bid.is_highest = bid.listing.bids.order_by("value").last().bidder == user
+            bid.listing.is_ended = bid.listing.end_date < datetime.today()
+
         return render(request, "auctions/bids.html", {
             "bids" : bids
         })
